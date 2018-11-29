@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN"
+                            "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Actions">
+        <folder name="CetusEdit">
+            <file name="systems-tech247-util-AddNew.instance">
+                <!--systems.tech247.util.AddNew-->
+                <attr
+                    bundlevalue="systems.tech247.util.Bundle#CTL_AddNew" name="displayName"/>
+                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
+                <attr name="type" stringvalue="systems.tech247.util.CapCreatable"/>
+                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
+                <attr name="injectable" stringvalue="systems.tech247.util.AddNew"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/AddNew.png"/>
+                <attr boolvalue="false" name="noIconInMenu"/>
+            </file>
+            <file name="systems-tech247-util-Delete.instance">
+                <!--systems.tech247.util.Delete-->
+                <attr
+                    bundlevalue="systems.tech247.util.Bundle#CTL_Delete" name="displayName"/>
+                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
+                <attr name="type" stringvalue="systems.tech247.util.CapDeletable"/>
+                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
+                <attr name="injectable" stringvalue="systems.tech247.util.Delete"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/delete.png"/>
+                <attr boolvalue="false" name="noIconInMenu"/>
+            </file>
+            <file name="systems-tech247-util-Edit.instance">
+                <!--systems.tech247.util.Edit-->
+                <attr bundlevalue="systems.tech247.util.Bundle#CTL_Edit" name="displayName"/>
+                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
+                <attr name="type" stringvalue="systems.tech247.util.CapEditable"/>
+                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
+                <attr name="injectable" stringvalue="systems.tech247.util.Edit"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/edit.png"/>
+                <attr boolvalue="false" name="noIconInMenu"/>
+            </file>
+        </folder>
+        <folder name="CetusPLR">
+            <file name="systems-tech247-util-ClosePeriod.instance">
+                <!--systems.tech247.util.ClosePeriod-->
+                <attr
+                    bundlevalue="systems.tech247.util.Bundle#CTL_Close" name="displayName"/>
+                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
+                <attr name="type" stringvalue="systems.tech247.util.CapClosePeriod"/>
+                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
+                <attr name="injectable" stringvalue="systems.tech247.util.ClosePeriod"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/close.png"/>
+                <attr boolvalue="false" name="noIconInMenu"/>
+            </file>
+        </folder>
+        <folder name="CetusDeliver">
+            <file name="systems-tech247-util-Email.instance">
+                <!--systems.tech247.util.Email-->
+                <attr
+                    bundlevalue="systems.tech247.util.Bundle#CTL_Email" name="displayName"/>
+                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
+                <attr name="type" stringvalue="systems.tech247.util.CapEmail"/>
+                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
+                <attr name="injectable" stringvalue="systems.tech247.util.Email"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/email.png"/>
+                <attr boolvalue="false" name="noIconInMenu"/>
+            </file>
+            <file name="systems-tech247-util-Preview.instance">
+                <!--systems.tech247.util.Preview-->
+                <attr
+                    bundlevalue="systems.tech247.util.Bundle#CTL_Preview" name="displayName"/>
+                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
+                <attr name="type" stringvalue="systems.tech247.util.CapPreview"/>
+                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
+                <attr name="injectable" stringvalue="systems.tech247.util.Preview"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/preview.png"/>
+                <attr boolvalue="false" name="noIconInMenu"/>
+            </file>
+            <file name="systems-tech247-util-Print.instance">
+                <!--systems.tech247.util.Print-->
+                <attr
+                    bundlevalue="systems.tech247.util.Bundle#CTL_Print" name="displayName"/>
+                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
+                <attr name="type" stringvalue="systems.tech247.util.CapPrint"/>
+                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
+                <attr name="injectable" stringvalue="systems.tech247.util.Print"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/print.png"/>
+                <attr boolvalue="false" name="noIconInMenu"/>
+            </file>
+        </folder>
+        <folder name="PDR">
+            <file name="systems-tech247-pdr-CategoriesTopComponent.instance">
+                <!--systems.tech247.view.CategoriesTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.view.CategoriesTopComponent"/>
+                <attr name="preferredID" stringvalue="CategoriesTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.view.Bundle#CTL_CategoriesAction" name="displayName"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/EmpCategory.png"/>
+            </file>
+            <file name="systems-tech247-view-EmployeesTopComponent.instance">
+                <!--systems.tech247.view.EmployeesTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.view.EmployeesTopComponent"/>
+                <attr name="preferredID" stringvalue="EmployeesTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.view.Bundle#CTL_EmployeesAction" name="displayName"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/person.png"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Toolbars">
+        <folder name="CetusEdit">
+            <file name="systems-tech247-util-AddNew.shadow">
+                <!--systems.tech247.util.AddNew-->
+                <attr name="originalFile" stringvalue="Actions/CetusEdit/systems-tech247-util-AddNew.instance"/>
+                <attr intvalue="600" name="position"/>
+            </file>
+            <file name="systems-tech247-util-Delete.shadow">
+                <!--systems.tech247.util.Delete-->
+                <attr name="originalFile" stringvalue="Actions/CetusEdit/systems-tech247-util-Delete.instance"/>
+                <attr intvalue="620" name="position"/>
+            </file>
+            <file name="systems-tech247-util-Edit.shadow">
+                <!--systems.tech247.util.Edit-->
+                <attr name="originalFile" stringvalue="Actions/CetusEdit/systems-tech247-util-Edit.instance"/>
+                <attr intvalue="610" name="position"/>
+            </file>
+        </folder>
+        <folder name="CetusPLR">
+            <file name="systems-tech247-util-ClosePeriod.shadow">
+                <!--systems.tech247.util.ClosePeriod-->
+                <attr name="originalFile" stringvalue="Actions/CetusPLR/systems-tech247-util-ClosePeriod.instance"/>
+                <attr intvalue="610" name="position"/>
+            </file>
+        </folder>
+        <folder name="CetusDeliver">
+            <file name="systems-tech247-util-Email.shadow">
+                <!--systems.tech247.util.Email-->
+                <attr name="originalFile" stringvalue="Actions/CetusDeliver/systems-tech247-util-Email.instance"/>
+                <attr intvalue="620" name="position"/>
+            </file>
+            <file name="systems-tech247-util-Preview.shadow">
+                <!--systems.tech247.util.Preview-->
+                <attr name="originalFile" stringvalue="Actions/CetusDeliver/systems-tech247-util-Preview.instance"/>
+                <attr intvalue="610" name="position"/>
+            </file>
+            <file name="systems-tech247-util-Print.shadow">
+                <!--systems.tech247.util.Print-->
+                <attr name="originalFile" stringvalue="Actions/CetusDeliver/systems-tech247-util-Print.instance"/>
+                <attr intvalue="600" name="position"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="PDR">
+            <file name="systems-tech247-pdr-CategoriesTopComponent.shadow">
+                <!--systems.tech247.view.CategoriesTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/PDR/systems-tech247-pdr-CategoriesTopComponent.instance"/>
+            </file>
+            <file name="systems-tech247-view-EmployeesTopComponent.shadow">
+                <!--systems.tech247.view.EmployeesTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/PDR/systems-tech247-view-EmployeesTopComponent.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="OptionsDialog">
+        <file name="systems-tech247-dbaccess-DatabaseConnectionSettingsOptionsPanelController.instance">
+            <!--systems.tech247.dbaccess.DatabaseConnectionSettingsOptionsPanelController-->
+            <attr
+                methodvalue="org.netbeans.spi.options.OptionsCategory.createCategory" name="instanceCreate"/>
+            <attr name="controller" newvalue="systems.tech247.dbaccess.DatabaseConnectionSettingsOptionsPanelController"/>
+            <attr
+                bundlevalue="systems.tech247.dbaccess.Bundle#OptionsCategory_Name_DatabaseConnectionSettings" name="categoryName"/>
+            <attr name="iconBase" stringvalue="systems/tech247/dbaccess/database.png"/>
+            <attr
+                bundlevalue="systems.tech247.dbaccess.Bundle#OptionsCategory_Keywords_DatabaseConnectionSettings" name="keywords"/>
+            <attr name="keywordsCategory" stringvalue="DatabaseConnectionSettings"/>
+        </file>
+        <folder name="Advanced">
+            <file name="systems-tech247-dbaccess-HRDatabaseOptionsPanelController.instance">
+                <!--systems.tech247.dbaccess.HRDatabaseOptionsPanelController-->
+                <attr
+                    methodvalue="org.netbeans.spi.options.AdvancedOption.createSubCategory" name="instanceCreate"/>
+                <attr name="controller" newvalue="systems.tech247.dbaccess.HRDatabaseOptionsPanelController"/>
+                <attr
+                    bundlevalue="systems.tech247.dbaccess.Bundle#AdvancedOption_DisplayName_HRDatabase" name="displayName"/>
+                <attr
+                    bundlevalue="systems.tech247.dbaccess.Bundle#AdvancedOption_Keywords_HRDatabase" name="keywords"/>
+                <attr name="keywordsCategory" stringvalue="Advanced/HRDatabase"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="CategoriesTopComponent.settings">
+                <!--systems.tech247.view.CategoriesTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="systems.tech247.view.CategoriesTopComponent"/>
+</settings>
+]]></file>
+            <file name="EmployeesTopComponent.settings">
+                <!--systems.tech247.view.EmployeesTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="systems.tech247.view.EmployeesTopComponent"/>
+</settings>
+]]></file>
+        </folder>
+        <folder name="Modes">
+            <folder name="explorer">
+                <file name="CategoriesTopComponent.wstcref">
+                    <!--systems.tech247.view.CategoriesTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="CategoriesTopComponent"/>
+  <state opened="false"/>
+</tc-ref>
+]]></file>
+                <file name="EmployeesTopComponent.wstcref">
+                    <!--systems.tech247.view.EmployeesTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="EmployeesTopComponent"/>
+  <state opened="false"/>
+</tc-ref>
+]]></file>
+            </folder>
+        </folder>
+    </folder>
+    <folder name="xml">
+        <folder name="entities">
+            <folder name="systems_tech247_pdr">
+                <file name="Categories" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.view.CategoriesTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.pdr//Categories//EN"/>
+                </file>
+                <file name="PositionEditor" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.view.CategoryEditorTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.pdr//PositionEditor//EN"/>
+                </file>
+            </folder>
+            <folder name="systems_tech247_view">
+                <file name="Employees" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.view.EmployeesTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.view//Employees//EN"/>
+                </file>
+            </folder>
+        </folder>
+        <folder name="memory">
+            <folder name="systems">
+                <folder name="tech247">
+                    <folder name="view">
+                        <file name="CategoriesTopComponent">
+                            <!--systems.tech247.view.CategoriesTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_pdr/Categories.instance"/>
+                        </file>
+                        <file name="CategoryEditorTopComponent">
+                            <!--systems.tech247.view.CategoryEditorTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_pdr/PositionEditor.instance"/>
+                        </file>
+                        <file name="EmployeesTopComponent">
+                            <!--systems.tech247.view.EmployeesTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_view/Employees.instance"/>
+                        </file>
+                    </folder>
+                </folder>
+            </folder>
+        </folder>
+        <folder name="lookups">
+            <folder name="systems_tech247_pdr">
+                <file name="Categories.instance">
+                    <!--systems.tech247.view.CategoriesTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.view.CategoriesTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.view.CategoriesTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+                <file name="PositionEditor.instance">
+                    <!--systems.tech247.view.CategoryEditorTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.view.CategoryEditorTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.view.CategoryEditorTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+            </folder>
+            <folder name="systems_tech247_view">
+                <file name="Employees.instance">
+                    <!--systems.tech247.view.EmployeesTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.view.EmployeesTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.view.EmployeesTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>
