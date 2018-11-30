@@ -1184,7 +1184,7 @@ public class DataAccess implements CurrentPeriodProvider {
         
         
         
-        Query query = getEntityManager().createNativeQuery(
+        Query query = entityManager.createNativeQuery(
                 "SELECT * FROM HrsUsers WHERE accDisabled=0 AND username='"+username+"'",HrsUsers.class);
         
         
