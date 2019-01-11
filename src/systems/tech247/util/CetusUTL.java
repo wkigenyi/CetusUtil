@@ -40,6 +40,7 @@ public class CetusUTL implements Lookup.Provider {
     
     public static List<Integer> userRights=new ArrayList();
     public static TopComponentGroup currentTCG;
+    
     public static InstanceContent content = new InstanceContent();
     Lookup lookup = new AbstractLookup(content);
     public static ExplorerManager emSelectableEmployees = new ExplorerManager();

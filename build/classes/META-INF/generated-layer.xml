@@ -3,58 +3,19 @@
                             "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
 <filesystem>
     <folder name="Actions">
-        <folder name="CetusEdit">
-            <file name="systems-tech247-util-AddNew.instance">
-                <!--systems.tech247.util.AddNew-->
-                <attr
-                    bundlevalue="systems.tech247.util.Bundle#CTL_AddNew" name="displayName"/>
-                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
-                <attr name="type" stringvalue="systems.tech247.util.CapCreatable"/>
-                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
-                <attr name="injectable" stringvalue="systems.tech247.util.AddNew"/>
-                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
-                <attr name="iconBase" stringvalue="systems/tech247/util/icons/AddNew.png"/>
-                <attr boolvalue="false" name="noIconInMenu"/>
-            </file>
-            <file name="systems-tech247-util-Delete.instance">
-                <!--systems.tech247.util.Delete-->
-                <attr
-                    bundlevalue="systems.tech247.util.Bundle#CTL_Delete" name="displayName"/>
-                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
-                <attr name="type" stringvalue="systems.tech247.util.CapDeletable"/>
-                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
-                <attr name="injectable" stringvalue="systems.tech247.util.Delete"/>
-                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
-                <attr name="iconBase" stringvalue="systems/tech247/util/icons/delete.png"/>
-                <attr boolvalue="false" name="noIconInMenu"/>
-            </file>
-            <file name="systems-tech247-util-Edit.instance">
-                <!--systems.tech247.util.Edit-->
-                <attr bundlevalue="systems.tech247.util.Bundle#CTL_Edit" name="displayName"/>
-                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
-                <attr name="type" stringvalue="systems.tech247.util.CapEditable"/>
-                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
-                <attr name="injectable" stringvalue="systems.tech247.util.Edit"/>
-                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
-                <attr name="iconBase" stringvalue="systems/tech247/util/icons/edit.png"/>
-                <attr boolvalue="false" name="noIconInMenu"/>
-            </file>
-        </folder>
-        <folder name="CetusPLR">
-            <file name="systems-tech247-util-ClosePeriod.instance">
-                <!--systems.tech247.util.ClosePeriod-->
-                <attr
-                    bundlevalue="systems.tech247.util.Bundle#CTL_Close" name="displayName"/>
-                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
-                <attr name="type" stringvalue="systems.tech247.util.CapClosePeriod"/>
-                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
-                <attr name="injectable" stringvalue="systems.tech247.util.ClosePeriod"/>
-                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
-                <attr name="iconBase" stringvalue="systems/tech247/util/icons/close.png"/>
-                <attr boolvalue="false" name="noIconInMenu"/>
-            </file>
-        </folder>
         <folder name="CetusDeliver">
+            <file name="systems-tech247-util-ActionDownload.instance">
+                <!--systems.tech247.util.ActionDownload-->
+                <attr
+                    bundlevalue="systems.tech247.util.Bundle#CTL_ActionDownload" name="displayName"/>
+                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
+                <attr name="type" stringvalue="systems.tech247.util.CapDownloadable"/>
+                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
+                <attr name="injectable" stringvalue="systems.tech247.util.ActionDownload"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/download.png"/>
+                <attr boolvalue="false" name="noIconInMenu"/>
+            </file>
             <file name="systems-tech247-util-Email.instance">
                 <!--systems.tech247.util.Email-->
                 <attr
@@ -92,55 +53,77 @@
                 <attr boolvalue="false" name="noIconInMenu"/>
             </file>
         </folder>
-        <folder name="PDR">
-            <file name="systems-tech247-pdr-CategoriesTopComponent.instance">
-                <!--systems.tech247.view.CategoriesTopComponent-->
+        <folder name="CetusPLR">
+            <file name="systems-tech247-util-ActionUpload.instance">
+                <!--systems.tech247.util.ActionUpload-->
                 <attr
-                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
-                <attr name="component" newvalue="systems.tech247.view.CategoriesTopComponent"/>
-                <attr name="preferredID" stringvalue="CategoriesTopComponent"/>
-                <attr
-                    bundlevalue="systems.tech247.view.Bundle#CTL_CategoriesAction" name="displayName"/>
-                <attr name="iconBase" stringvalue="systems/tech247/util/icons/EmpCategory.png"/>
+                    bundlevalue="systems.tech247.util.Bundle#CTL_Upload" name="displayName"/>
+                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
+                <attr name="type" stringvalue="systems.tech247.util.CapUploadable"/>
+                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
+                <attr name="injectable" stringvalue="systems.tech247.util.ActionUpload"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/upload.png"/>
+                <attr boolvalue="false" name="noIconInMenu"/>
             </file>
-            <file name="systems-tech247-view-EmployeesTopComponent.instance">
-                <!--systems.tech247.view.EmployeesTopComponent-->
+            <file name="systems-tech247-util-ClosePeriod.instance">
+                <!--systems.tech247.util.ClosePeriod-->
                 <attr
-                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
-                <attr name="component" newvalue="systems.tech247.view.EmployeesTopComponent"/>
-                <attr name="preferredID" stringvalue="EmployeesTopComponent"/>
+                    bundlevalue="systems.tech247.util.Bundle#CTL_Close" name="displayName"/>
+                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
+                <attr name="type" stringvalue="systems.tech247.util.CapClosePeriod"/>
+                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
+                <attr name="injectable" stringvalue="systems.tech247.util.ClosePeriod"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/close.png"/>
+                <attr boolvalue="false" name="noIconInMenu"/>
+            </file>
+        </folder>
+        <folder name="CetusEdit">
+            <file name="systems-tech247-util-AddNew.instance">
+                <!--systems.tech247.util.AddNew-->
                 <attr
-                    bundlevalue="systems.tech247.view.Bundle#CTL_EmployeesAction" name="displayName"/>
-                <attr name="iconBase" stringvalue="systems/tech247/util/icons/person.png"/>
+                    bundlevalue="systems.tech247.util.Bundle#CTL_AddNew" name="displayName"/>
+                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
+                <attr name="type" stringvalue="systems.tech247.util.CapCreatable"/>
+                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
+                <attr name="injectable" stringvalue="systems.tech247.util.AddNew"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/AddNew.png"/>
+                <attr boolvalue="false" name="noIconInMenu"/>
+            </file>
+            <file name="systems-tech247-util-Delete.instance">
+                <!--systems.tech247.util.Delete-->
+                <attr
+                    bundlevalue="systems.tech247.util.Bundle#CTL_Delete" name="displayName"/>
+                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
+                <attr name="type" stringvalue="systems.tech247.util.CapDeletable"/>
+                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
+                <attr name="injectable" stringvalue="systems.tech247.util.Delete"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/delete.png"/>
+                <attr boolvalue="false" name="noIconInMenu"/>
+            </file>
+            <file name="systems-tech247-util-Edit.instance">
+                <!--systems.tech247.util.Edit-->
+                <attr bundlevalue="systems.tech247.util.Bundle#CTL_Edit" name="displayName"/>
+                <attr methodvalue="org.openide.awt.Actions.context" name="instanceCreate"/>
+                <attr name="type" stringvalue="systems.tech247.util.CapEditable"/>
+                <attr methodvalue="org.openide.awt.Actions.inject" name="delegate"/>
+                <attr name="injectable" stringvalue="systems.tech247.util.Edit"/>
+                <attr name="selectionType" stringvalue="EXACTLY_ONE"/>
+                <attr name="iconBase" stringvalue="systems/tech247/util/icons/edit.png"/>
+                <attr boolvalue="false" name="noIconInMenu"/>
             </file>
         </folder>
     </folder>
     <folder name="Toolbars">
-        <folder name="CetusEdit">
-            <file name="systems-tech247-util-AddNew.shadow">
-                <!--systems.tech247.util.AddNew-->
-                <attr name="originalFile" stringvalue="Actions/CetusEdit/systems-tech247-util-AddNew.instance"/>
-                <attr intvalue="600" name="position"/>
-            </file>
-            <file name="systems-tech247-util-Delete.shadow">
-                <!--systems.tech247.util.Delete-->
-                <attr name="originalFile" stringvalue="Actions/CetusEdit/systems-tech247-util-Delete.instance"/>
-                <attr intvalue="620" name="position"/>
-            </file>
-            <file name="systems-tech247-util-Edit.shadow">
-                <!--systems.tech247.util.Edit-->
-                <attr name="originalFile" stringvalue="Actions/CetusEdit/systems-tech247-util-Edit.instance"/>
-                <attr intvalue="610" name="position"/>
-            </file>
-        </folder>
-        <folder name="CetusPLR">
-            <file name="systems-tech247-util-ClosePeriod.shadow">
-                <!--systems.tech247.util.ClosePeriod-->
-                <attr name="originalFile" stringvalue="Actions/CetusPLR/systems-tech247-util-ClosePeriod.instance"/>
-                <attr intvalue="610" name="position"/>
-            </file>
-        </folder>
         <folder name="CetusDeliver">
+            <file name="systems-tech247-util-ActionDownload.shadow">
+                <!--systems.tech247.util.ActionDownload-->
+                <attr name="originalFile" stringvalue="Actions/CetusDeliver/systems-tech247-util-ActionDownload.instance"/>
+                <attr intvalue="650" name="position"/>
+            </file>
             <file name="systems-tech247-util-Email.shadow">
                 <!--systems.tech247.util.Email-->
                 <attr name="originalFile" stringvalue="Actions/CetusDeliver/systems-tech247-util-Email.instance"/>
@@ -157,16 +140,33 @@
                 <attr intvalue="600" name="position"/>
             </file>
         </folder>
-    </folder>
-    <folder name="Menu">
-        <folder name="PDR">
-            <file name="systems-tech247-pdr-CategoriesTopComponent.shadow">
-                <!--systems.tech247.view.CategoriesTopComponent-->
-                <attr name="originalFile" stringvalue="Actions/PDR/systems-tech247-pdr-CategoriesTopComponent.instance"/>
+        <folder name="CetusPLR">
+            <file name="systems-tech247-util-ActionUpload.shadow">
+                <!--systems.tech247.util.ActionUpload-->
+                <attr name="originalFile" stringvalue="Actions/CetusPLR/systems-tech247-util-ActionUpload.instance"/>
+                <attr intvalue="620" name="position"/>
             </file>
-            <file name="systems-tech247-view-EmployeesTopComponent.shadow">
-                <!--systems.tech247.view.EmployeesTopComponent-->
-                <attr name="originalFile" stringvalue="Actions/PDR/systems-tech247-view-EmployeesTopComponent.instance"/>
+            <file name="systems-tech247-util-ClosePeriod.shadow">
+                <!--systems.tech247.util.ClosePeriod-->
+                <attr name="originalFile" stringvalue="Actions/CetusPLR/systems-tech247-util-ClosePeriod.instance"/>
+                <attr intvalue="610" name="position"/>
+            </file>
+        </folder>
+        <folder name="CetusEdit">
+            <file name="systems-tech247-util-AddNew.shadow">
+                <!--systems.tech247.util.AddNew-->
+                <attr name="originalFile" stringvalue="Actions/CetusEdit/systems-tech247-util-AddNew.instance"/>
+                <attr intvalue="600" name="position"/>
+            </file>
+            <file name="systems-tech247-util-Delete.shadow">
+                <!--systems.tech247.util.Delete-->
+                <attr name="originalFile" stringvalue="Actions/CetusEdit/systems-tech247-util-Delete.instance"/>
+                <attr intvalue="620" name="position"/>
+            </file>
+            <file name="systems-tech247-util-Edit.shadow">
+                <!--systems.tech247.util.Edit-->
+                <attr name="originalFile" stringvalue="Actions/CetusEdit/systems-tech247-util-Edit.instance"/>
+                <attr intvalue="610" name="position"/>
             </file>
         </folder>
     </folder>
@@ -215,7 +215,7 @@
 ]]></file>
         </folder>
         <folder name="Modes">
-            <folder name="explorer">
+            <folder name="editor">
                 <file name="CategoriesTopComponent.wstcref">
                     <!--systems.tech247.view.CategoriesTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
@@ -224,6 +224,8 @@
   <state opened="false"/>
 </tc-ref>
 ]]></file>
+            </folder>
+            <folder name="explorer">
                 <file name="EmployeesTopComponent.wstcref">
                     <!--systems.tech247.view.EmployeesTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">

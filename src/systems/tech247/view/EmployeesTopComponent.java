@@ -31,15 +31,15 @@ import org.openide.util.NbBundle.Messages;
 @TopComponent.Description(
         preferredID = "EmployeesTopComponent",
         iconBase = "systems/tech247/util/icons/person.png",
-        persistenceType = TopComponent.PERSISTENCE_ALWAYS
+        persistenceType = TopComponent.PERSISTENCE_NEVER
 )
 @TopComponent.Registration(mode = "explorer", openAtStartup = false)
 @ActionID(category = "PDR", id = "systems.tech247.view.EmployeesTopComponent")
-@ActionReference(path = "Menu/PDR" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_EmployeesAction",
-        preferredID = "EmployeesTopComponent"
-)
+//@ActionReference(path = "Menu/PDR" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_EmployeesAction",
+//        preferredID = "EmployeesTopComponent"
+//)
 @Messages({
     "CTL_EmployeesAction=Employees",
     "CTL_EmployeesTopComponent=Employees Window",

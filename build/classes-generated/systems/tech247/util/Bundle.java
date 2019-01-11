@@ -3,6 +3,13 @@ package systems.tech247.util;
 @javax.annotation.Generated(value="org.netbeans.modules.openide.util.NbBundleProcessor")
 class Bundle {
     /**
+     * @return <i>Download</i>
+     * @see ActionDownload
+     */
+    static String CTL_ActionDownload() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_ActionDownload");
+    }
+    /**
      * @return <i>Add New</i>
      * @see AddNew
      */
@@ -50,6 +57,13 @@ class Bundle {
      */
     static String CTL_Print() {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_Print");
+    }
+    /**
+     * @return <i>Upload</i>
+     * @see ActionUpload
+     */
+    static String CTL_Upload() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_Upload");
     }
     private Bundle() {}
 }

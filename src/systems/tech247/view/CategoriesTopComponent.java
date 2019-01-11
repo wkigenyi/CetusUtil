@@ -14,8 +14,13 @@ import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.OutlineView;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
+import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
+import org.openide.util.lookup.ProxyLookup;
+import systems.tech247.util.CapCreatable;
 
 
 /**
@@ -28,15 +33,15 @@ import org.openide.util.NbBundle.Messages;
 @TopComponent.Description(
         preferredID = "CategoriesTopComponent",
         iconBase = "systems/tech247/util/icons/EmpCategory.png",
-        persistenceType = TopComponent.PERSISTENCE_ALWAYS
+        persistenceType = TopComponent.PERSISTENCE_NEVER
 )
-@TopComponent.Registration(mode = "explorer", openAtStartup = false)
+@TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "PDR", id = "systems.tech247.pdr.CategoriesTopComponent")
-@ActionReference(path = "Menu/PDR" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_CategoriesAction",
-        preferredID = "CategoriesTopComponent"
-)
+//@ActionReference(path = "Menu/PDR" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_CategoriesAction",
+//        preferredID = "CategoriesTopComponent"
+//)
 @Messages({
     "CTL_CategoriesAction=Employee Categories",
     "CTL_CategoriesTopComponent=Employee Categories",
@@ -49,6 +54,8 @@ public final class CategoriesTopComponent extends TopComponent implements Explor
     String sqlString = "";
     String searchString;
     QueryCategory query = new QueryCategory();
+    InstanceContent content = new InstanceContent();
+    Lookup lkp = new AbstractLookup(content);
     
     public CategoriesTopComponent(){
         this("");
@@ -71,7 +78,16 @@ public final class CategoriesTopComponent extends TopComponent implements Explor
         loadItems();
         viewPanel.setLayout(new BorderLayout());
         viewPanel.add(ov);
-        associateLookup(ExplorerUtils.createLookup(em, getActionMap()));
+        content.add(new CapCreatable() {
+            @Override
+            public void create() {
+                TopComponent tc = new CategoryEditorTopComponent();
+                tc.open();
+                tc.requestActive();
+            }
+        });
+        Lookup merged = new ProxyLookup(lkp,ExplorerUtils.createLookup(em, getActionMap()));
+        associateLookup(merged);
         
 
         

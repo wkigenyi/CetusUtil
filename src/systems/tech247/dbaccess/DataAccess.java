@@ -20,10 +20,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.EntityManager;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.TypedQuery;
 import org.netbeans.api.options.OptionsDisplayer;
 
@@ -95,6 +99,7 @@ import systems.tech247.hr.TblPeriods;
 import systems.tech247.hr.Tribes;
 import systems.tech247.hr.Userinfo;
 import systems.tech247.hr.Visa;
+import systems.tech247.hr.VwPtmAttendanceWithComment;
 import systems.tech247.util.CetusUTL;
 import systems.tech247.util.Month;
 import systems.tech247.util.NotifyUtil;
@@ -103,8 +108,58 @@ import systems.tech247.util.NotifyUtil;
  *
  * @author Admin
  */
+
+
+@SqlResultSetMapping(
+        name="AttendanceSummary",
+        classes = {
+            @ConstructorResult(
+                    targetClass = AttendanceSummary.class,
+                    columns = {
+                        @ColumnResult(name = "EmployeeID"),
+                        @ColumnResult(name = "joined"),
+                        @ColumnResult(name = "EmpCode"),
+                        @ColumnResult(name = "SurName"),
+                        @ColumnResult(name = "OtherNames"),
+                        @ColumnResult(name = "dept"),
+                        @ColumnResult(name = "PositionName"),
+                        @ColumnResult(name = "category"),
+                        @ColumnResult(name = "daysInPeriod"),
+                        @ColumnResult(name = "absentDays"),
+                        @ColumnResult(name = "basicPay",type = Double.class),
+                    }
+            )
+        }
+)
+
+@NamedNativeQuery(
+        name = "getAttSum",
+        query = "select \n" +
+"employeeID,\n" +
+"empCode,\n" +
+"surName,\n" +
+"otherNames as otherName,\n" +
+"dept,\n" +
+"positionName as position,\n" +
+"CategoryDetails as category,\n" +
+"DateOfEmployment as joined,\n" +
+"COUNT(*) AS daysInPeriod,\n" +
+"SUM(CASE Comment WHEN 'ABSENT' THEN 1 ELSE 0 END) AS absentDays,\n" +
+"dbo.prlfnGetBasicPay(EmployeeID) AS basicPay\n" +
+"FROM vwPtmAttendanceWithComment \n" +
+"WHERE SHiftdate >=? AND SHiftdate <= ?\n" +
+"GROUP BY EmployeeID,EmpCode,SurName,OtherNames,Dept,PositionName,CategoryDetails,DateOfEmployment",
+        resultClass = AttendanceSummary.class
+)
+
+
+
+
+
 public class DataAccess implements CurrentPeriodProvider {
     static Map properties = new HashMap();
+    
+    
     
 
     
@@ -284,6 +339,15 @@ public class DataAccess implements CurrentPeriodProvider {
         return query.getResultList();
         
     }
+    
+    public static int getGenderCount(short genderID){
+        String sql = "select dbo.pdrfnGetGenderCount(?)";
+        Query query = entityManager.createNativeQuery(sql);
+        query.setParameter(1, genderID);
+        return (int)query.getSingleResult();
+    }
+    
+    
     public static List<Contacts> searchEmployeeContacts(Employees emp){
         String sql = "SELECT * FROM Contacts WHERE EmployeeID = ?";
         Query query = entityManager.createNativeQuery(sql,Contacts.class);
@@ -508,8 +572,8 @@ public class DataAccess implements CurrentPeriodProvider {
     }
     
     public List<PtmOutstationVisits> searchOutSS(Employees emp){
-        String sql = "SELECT * FROM Kin r WHERE r.EmployeeID = "+emp.getEmployeeID()+ "";
-        Query query = getEntityManager().createNativeQuery(sql,Kin.class);
+        String sql = "SELECT * FROM PtmOutstationVisits r WHERE r.EmployeeID = "+emp.getEmployeeID()+ "";
+        Query query = getEntityManager().createNativeQuery(sql,PtmOutstationVisits.class);
         return query.getResultList();
         
     }
@@ -701,7 +765,8 @@ public class DataAccess implements CurrentPeriodProvider {
     }
     
     public static List<LvwLeaveApplication> getEmployeeLeaveApplications(Employees emp){
-        Query query = getEntityManager().createNativeQuery("SELECT * FROM LvwLeaveApplication WHERE EmployeeID = "+emp.getEmployeeID()+"",LvwLeaveApplication.class);
+        Query query = getEntityManager().createNativeQuery("select * FROM lvwLeaveApplication WHERE EmployeeID = ? ORDER BY FromDate DESC",LvwLeaveApplication.class);
+        query.setParameter(1, emp.getEmployeeID());
         return query.getResultList();
     }
     
@@ -1083,9 +1148,13 @@ public class DataAccess implements CurrentPeriodProvider {
         NotifyUtil.error("There was a problem", "Password was not saved", ex, false);
     }
     //Saving the Password History
-    
+    short passwordNo = 0;
     Date now = new Date();
-    short passwordNo = (short)(getPasswordHistory(user.getUserID()).size()+1);
+    try{
+        passwordNo = (short)(getPasswordHistory(user.getUserID()).size()+1);
+    }catch(NullPointerException ex){
+        
+    }
     String sqlString = "INSERT INTO hrsPasswordHistory" +
         "           (UserID" +
         "           ,Password" +
@@ -1346,33 +1415,56 @@ public class DataAccess implements CurrentPeriodProvider {
 "           ([Employee_ID]\n" +
 "           ,[Currency_ID]\n" +
 "           ,[PayrollCode_ID]\n" +
-"           ,[Amount]\n" +
+"           ,[Converted_Amount]\n" +
 "           ,[Period_Month]\n" +
 "           ,[Period_Year]\n" +
 "           ,[PayPoint_ID]\n" +
 "           ,[Bank_Transfer]\n" +
 "           ,[Cash]\n" +
-"           ,[Cheque])\n" +
+"           ,[Cheque]" +
+"           ,[Conversion_Rate]" +
+"           ,[Amount]" +                    
+                     ")\n" +
 "     VALUES\n" +
-"           (?,?,?,dbo.prlFnComputePayrollAmount(?,?,?,?),?,?,?,?,?,?)";
+"           (?"                                                 //empID 1
+                    + ",dbo.prlfnGetEmpCodeCurrencyID(?,?)"     //currencyID 2,3
+                    + ",?"                                      //payrollCodeID 4
+                    + ",dbo.prlFnComputePayrollAmount(?,?,?,?)" //Converted Amt 5,6,7,8
+                    + ",?"                                      //Month 9
+                    + ",?"                                      //Year 10
+                    + ",?"                                      //Paypoint 11
+                    + ",?"                                      //Bank Transfer 12
+                    + ",?"                                      //Cash 13
+                    + ",?"                                      //Cheque 14
+                    + ",dbo.prlfnGetExchangeRate(dbo.prlfnGetEmpCodeCurrencyID(?,?))"                 //Exchange Rate 15,16
+                    + ",dbo.prlfnGetConvertedAmount(dbo.prlFnComputePayrollAmount(?,?,?,?),dbo.prlfnGetExchangeRate(dbo.prlfnGetEmpCodeCurrencyID(?,?)))" //Amount 17,18,19,20,21,22
+                    + ")";                                    
             
         
             Query query = entityManager.createNativeQuery(sql);
             
             query.setParameter(1, e.getEmployeeID());
-            query.setParameter(2, e.getCurrencyID().getCurrencyID());
+            query.setParameter(2, e.getEmployeeID());
             query.setParameter(3, code.getPayrollCodeID());
-            query.setParameter(4, e.getEmployeeID());
-            query.setParameter(5, code.getPayrollCodeID());
-            query.setParameter(6, covertMonthsToInt(p.getPeriodMonth()));
-            query.setParameter(7, p.getPeriodYear());
-            query.setParameter(8, covertMonthsToInt(p.getPeriodMonth()));
-            query.setParameter(9, p.getPeriodYear());
-            query.setParameter(10, 1);
-            query.setParameter(11, 1);
-            query.setParameter(12, 0);
-            query.setParameter(13, 0);
-            
+            query.setParameter(4, code.getPayrollCodeID());
+            query.setParameter(5, e.getEmployeeID());
+            query.setParameter(6, code.getPayrollCodeID());
+            query.setParameter(7, covertMonthsToInt(p.getPeriodMonth()));
+            query.setParameter(8, p.getPeriodYear());
+            query.setParameter(9, covertMonthsToInt(p.getPeriodMonth()));
+            query.setParameter(10, p.getPeriodYear());
+            query.setParameter(11, 1);//Paypoint
+            query.setParameter(12, 0);//Bank Transfer
+            query.setParameter(13, 0);//Cash
+            query.setParameter(14, 0);//Check
+            query.setParameter(15, e.getEmployeeID());//employeeID to get Currency
+            query.setParameter(16, code.getPayrollCodeID());//pcode to get currency
+            query.setParameter(17, e.getEmployeeID());
+            query.setParameter(18, code.getPayrollCodeID());
+            query.setParameter(19, covertMonthsToInt(p.getPeriodMonth()));
+            query.setParameter(20, p.getPeriodYear());
+            query.setParameter(21, e.getEmployeeID());
+            query.setParameter(22, code.getPayrollCodeID());
             
             
             query.executeUpdate();
@@ -1393,383 +1485,13 @@ public class DataAccess implements CurrentPeriodProvider {
     
     
     
-        public static void postHousing(Employees e,TblPeriods p){
-        //Convert amount to Base Currency
-        try{
-        BigDecimal converted = e.getHouseAllowance().multiply(e.getCurrencyID().getConversionRate());
-        
-        try{
-        entityManager.getTransaction().begin();
-        }catch(Exception ex){
-            
-        }
-        String sql= "INSERT INTO [dbo].[tblPeriodTransactions]\n" +
-"           ([Employee_ID]\n" +
-"           ,[Currency_ID]\n" +
-"           ,[PayrollCode_ID]\n" +
-"           ,[Amount]\n" +
-"           ,[Conversion_Rate]\n" +
-"           ,[Converted_Amount]\n" +
-"           ,[Message]\n" +
-"           ,[Period_Month]\n" +
-"           ,[Period_Year]\n" +
-"           ,[PayPoint_ID]\n" +
-"           ,[Bank_Transfer]\n" +
-"           ,[Cash]\n" +
-"           ,[Cheque])\n" +
-"     VALUES\n" +
-"           ("+e.getEmployeeID()+"\n" +
-"           ,"+e.getCurrencyID().getCurrencyID()+"\n" +
-"           ,"+3+"\n" +
-"           ,"+e.getHouseAllowance()+"\n" +
-"           ,"+e.getCurrencyID().getCurrencyID()+"\n" +
-"           ,"+converted+"\n" +
-"           ,'No Message'" +
 
-"           ,"+covertMonthsToInt(p.getPeriodMonth()) +"\n" +
-"           ,"+p.getPeriodYear()+"\n" +
-"           ,"+1+"\n" +
-"           ,"+0+"\n" +
-"           ,"+0+","+0+")";
-        
-        Query query = entityManager.createNativeQuery(sql);
-        query.executeUpdate();
-        //StatusDisplayer.getDefault().setStatusText("Processed For: "+e.getSurName()+" "+ e.getOtherNames());
-        entityManager.getTransaction().commit();
-        }catch(Exception ex){
-            
-        }
-        
-    }
-        public static void postGross(Employees e,TblPeriods p){
 
-        
-        Double gross = getGrossPay(e, p);
-        
-        
-        try{
-                entityManager.getTransaction().begin();
-            }catch(Exception ex){
-            
-            }
-        
-            
-        
-        String sql= "INSERT INTO [dbo].[tblPeriodTransactions]\n" +
-"           ([Employee_ID]\n" +
-"           ,[Currency_ID]\n" +
-"           ,[PayrollCode_ID]\n" +
-"           ,[Amount]\n" +
-"           ,[Conversion_Rate]\n" +
-"           ,[Converted_Amount]\n" +
-"           ,[Message]\n" +
-"           ,[Period_Month]\n" +
-"           ,[Period_Year]\n" +
-"           ,[PayPoint_ID]\n" +
-"           ,[Bank_Transfer]\n" +
-"           ,[Cash]\n" +
-"           ,[Cheque])\n" +
-"     VALUES\n" +
-"           ("+e.getEmployeeID()+"\n" +
-"           ,"+e.getCurrencyID().getCurrencyID()+"\n" +
-"           ,"+1+"\n" +
-"           ,"+gross+"\n" +
-"           ,"+e.getCurrencyID().getCurrencyID()+"\n" +
-"           ,"+gross+"\n" +
-"           ,'No Message'" +
-
-"           ,"+covertMonthsToInt(p.getPeriodMonth()) +"\n" +
-"           ,"+p.getPeriodYear()+"\n" +
-"           ,"+1+"\n" +
-"           ,"+0+"\n" +
-"           ,"+0+","+0+")";
-        
-        Query query = entityManager.createNativeQuery(sql);
-        query.executeUpdate();
-        //StatusDisplayer.getDefault().setStatusText("Processed For: "+e.getSurName()+" "+ e.getOtherNames());
-       
-
-        
-        
-        
-                    //Posting TAXABLE PAYE
-        
-        String sql3= "INSERT INTO [dbo].[tblPeriodTransactions]\n" +
-"           ([Employee_ID]\n" +
-"           ,[Currency_ID]\n" +
-"           ,[PayrollCode_ID]\n" +
-"           ,[Amount]\n" +
-"           ,[Conversion_Rate]\n" +
-"           ,[Converted_Amount]\n" +
-"           ,[Message]\n" +
-"           ,[Period_Month]\n" +
-"           ,[Period_Year]\n" +
-"           ,[PayPoint_ID]\n" +
-"           ,[Bank_Transfer]\n" +
-"           ,[Cash]\n" +
-"           ,[Cheque])\n" +
-"     VALUES\n" +
-"           ("+e.getEmployeeID()+"\n" +
-"           ,"+e.getCurrencyID().getCurrencyID()+"\n" +
-"           ,"+5+"\n" +
-"           ,"+gross+"\n" +
-"           ,"+e.getCurrencyID().getCurrencyID()+"\n" +
-"           ,"+gross+"\n" +
-"           ,'No Message'" +
-
-"           ,"+covertMonthsToInt(p.getPeriodMonth()) +"\n" +
-"           ,"+p.getPeriodYear()+"\n" +
-"           ,"+1+"\n" +
-"           ,"+0+"\n" +
-"           ,"+0+","+0+")";
-        
-        Query query3 = entityManager.createNativeQuery(sql3);
-        query3.executeUpdate();
-        //StatusDisplayer.getDefault().setStatusText("Processed For: "+e.getSurName()+" "+ e.getOtherNames());
-        entityManager.getTransaction().commit();
-        
-                
-
-        
-        
-        
-        
-        
-        
-        
-            
-        
-        
-    }
-        public void postDeduction(Employees e,TblPeriods p){
-        
-            
-        
-            Double deductions = getTotalDeductions(e, p);
-      
-        
-        
-        
-        
-        
-                
-       
-        
-        
-        
-        try{
-        
-        
-        entityManager.getTransaction().begin();
-        
-            
-        
-        String sql= "INSERT INTO [dbo].[tblPeriodTransactions]\n" +
-"           ([Employee_ID]\n" +
-"           ,[Currency_ID]\n" +
-"           ,[PayrollCode_ID]\n" +
-"           ,[Amount]\n" +
-"           ,[Conversion_Rate]\n" +
-"           ,[Converted_Amount]\n" +
-"           ,[Message]\n" +
-"           ,[Period_Month]\n" +
-"           ,[Period_Year]\n" +
-"           ,[PayPoint_ID]\n" +
-"           ,[Bank_Transfer]\n" +
-"           ,[Cash]\n" +
-"           ,[Cheque])\n" +
-"     VALUES\n" +
-"           ("+e.getEmployeeID()+"\n" +
-"           ,"+e.getCurrencyID().getCurrencyID()+"\n" +
-"           ,"+11+"\n" +
-"           ,"+deductions+"\n" +
-"           ,"+e.getCurrencyID().getCurrencyID()+"\n" +
-"           ,"+deductions+"\n" +
-"           ,'No Message'" +
-
-"           ,"+covertMonthsToInt(p.getPeriodMonth()) +"\n" +
-"           ,"+p.getPeriodYear()+"\n" +
-"           ,"+1+"\n" +
-"           ,"+0+"\n" +
-"           ,"+0+","+0+")";
-        
-        Query query = entityManager.createNativeQuery(sql);
-        query.executeUpdate();
-        //StatusDisplayer.getDefault().setStatusText("Processed For: "+e.getSurName()+" "+ e.getOtherNames());
-        entityManager.getTransaction().commit();
-
-        }catch(Exception ex){
-            
-        }
-        
-        
-                    
-        
-                
-
-        
-        
-        
-        
-        
-        
-        
-            
-        
-        
-    }
-        
-        public static void postOtherDeductions(Employees e,TblPeriods p){
-        
-         Double otherDeductions = getOtherDeductions(e, p);
-            
 
         
 
         
-        
-        
-        
-                
-       
-        
-        
-        
-        
-        
-        
-        entityManager.getTransaction().begin();
-        
-            
-        
-        String sql= "INSERT INTO [dbo].[tblPeriodTransactions]\n" +
-"           ([Employee_ID]\n" +
-"           ,[Currency_ID]\n" +
-"           ,[PayrollCode_ID]\n" +
-"           ,[Amount]\n" +
-"           ,[Conversion_Rate]\n" +
-"           ,[Converted_Amount]\n" +
-"           ,[Message]\n" +
-"           ,[Period_Month]\n" +
-"           ,[Period_Year]\n" +
-"           ,[PayPoint_ID]\n" +
-"           ,[Bank_Transfer]\n" +
-"           ,[Cash]\n" +
-"           ,[Cheque])\n" +
-"     VALUES\n" +
-"           ("+e.getEmployeeID()+"\n" +
-"           ,"+e.getCurrencyID().getCurrencyID()+"\n" +
-"           ,"+41+"\n" +
-"           ,"+otherDeductions+"\n" +
-"           ,"+e.getCurrencyID().getCurrencyID()+"\n" +
-"           ,"+otherDeductions+"\n" +
-"           ,'No Message'" +
 
-"           ,"+covertMonthsToInt(p.getPeriodMonth()) +"\n" +
-"           ,"+p.getPeriodYear()+"\n" +
-"           ,"+1+"\n" +
-"           ,"+0+"\n" +
-"           ,"+0+","+0+")";
-        
-        Query query = entityManager.createNativeQuery(sql);
-        query.executeUpdate();
-        //StatusDisplayer.getDefault().setStatusText("Processed For: "+e.getSurName()+" "+ e.getOtherNames());
-        entityManager.getTransaction().commit();
-
-        
-        
-        
-                    
-        
-                
-
-        
-        
-        
-        
-        
-        
-        
-            
-        
-        
-    }
-        
-                public  void postStatutoryDeductions(Employees e,TblPeriods p){
-        
-            //Gross Pay, Taxable Pay, NSSF, PAYE
-            
-
-        
-
-
-        
-        
-        Double deduction = getStatutoryDeductions(e, p);
-        
-        
-        
-        
-        
-        
-        
-        
-        entityManager.getTransaction().begin();
-        
-            
-        
-        String sql= "INSERT INTO [dbo].[tblPeriodTransactions]\n" +
-"           ([Employee_ID]\n" +
-"           ,[Currency_ID]\n" +
-"           ,[PayrollCode_ID]\n" +
-"           ,[Amount]\n" +
-"           ,[Conversion_Rate]\n" +
-"           ,[Converted_Amount]\n" +
-"           ,[Message]\n" +
-"           ,[Period_Month]\n" +
-"           ,[Period_Year]\n" +
-"           ,[PayPoint_ID]\n" +
-"           ,[Bank_Transfer]\n" +
-"           ,[Cash]\n" +
-"           ,[Cheque])\n" +
-"     VALUES\n" +
-"           ("+e.getEmployeeID()+"\n" +
-"           ,"+e.getCurrencyID().getCurrencyID()+"\n" +
-"           ,"+4+"\n" +
-"           ,"+deduction+"\n" +
-"           ,"+e.getCurrencyID().getCurrencyID()+"\n" +
-"           ,"+deduction+"\n" +
-"           ,'No Message'" +
-
-"           ,"+covertMonthsToInt(p.getPeriodMonth()) +"\n" +
-"           ,"+p.getPeriodYear()+"\n" +
-"           ,"+1+"\n" +
-"           ,"+0+"\n" +
-"           ,"+0+","+0+")";
-        
-        Query query = entityManager.createNativeQuery(sql);
-        query.executeUpdate();
-        //StatusDisplayer.getDefault().setStatusText("Processed For: "+e.getSurName()+" "+ e.getOtherNames());
-        entityManager.getTransaction().commit();
-
-        
-        
-        
-                    
-        
-                
-
-        
-        
-        
-        
-        
-        
-        
-            
-        
-        
-    }
                 
       public static List<TblPayrollCodeGroups> getPayrollCodeGroups(){
       TypedQuery<TblPayrollCodeGroups> query = entityManager.createQuery(
@@ -1781,8 +1503,8 @@ public class DataAccess implements CurrentPeriodProvider {
         
         
         
-        public static void deletePeriodTransactions(TblPeriods p){
-            String sql = "DELETE FROM TblPeriodTransactions where Period_Year = "+p.getPeriodYear()+" AND Period_Month="+covertMonthsToInt(p.getPeriodMonth())+"";
+        public static void deletePeriodTransactions(TblPeriods p,Employees e){
+            String sql = "DELETE FROM TblPeriodTransactions where Period_Year = "+p.getPeriodYear()+" AND Period_Month="+covertMonthsToInt(p.getPeriodMonth())+" AND Employee_ID= "+e.getEmployeeID()+"";
             Query query = entityManager.createNativeQuery(sql);
             entityManager.getTransaction().begin();
             query.executeUpdate();
@@ -2020,9 +1742,11 @@ public class DataAccess implements CurrentPeriodProvider {
 "           ,'"+sdf.format(new Date())+"')";
         
         Query query = entityManager.createNativeQuery(sql);
+        
         query.executeUpdate();
         //StatusDisplayer.getDefault().setStatusText("Processed For: "+e.getSurName()+" "+ e.getOtherNames());
         entityManager.getTransaction().commit();
+        
         
     }
         
@@ -2185,13 +1909,34 @@ public class DataAccess implements CurrentPeriodProvider {
    
     
     public static BigDecimal getPayrollAmount(Employees employeeID, int pcode,TblPeriods period){
-        
+        int month = CetusUTL.covertMonthsToInt(period.getPeriodMonth());
+        int yr = period.getPeriodYear();
+        String sql= "SELECT dbo.prlFnGetConvertedPayrollAmount(?,?,?,?)";
+        Query query = entityManager.createNativeQuery(sql);
+        query.setParameter(1, employeeID.getEmployeeID());
+        query.setParameter(2, pcode);
+        query.setParameter(3, month);
+        query.setParameter(4, yr);
+        try{
+            BigDecimal amount = (BigDecimal)(query.getSingleResult());
+            
+            return amount;
+          
+        }catch(Exception ex){
+            System.out.println("This is the exception: "+ex.getLocalizedMessage());
+            return BigDecimal.ZERO;
+        }
+    }
+    
+    public static BigDecimal getPayslipAmount(Employees employeeID, int pcode,TblPeriods period){
+        int month = CetusUTL.covertMonthsToInt(period.getPeriodMonth());
+        int yr = period.getPeriodYear();
         String sql= "SELECT dbo.prlFnGetPayrollAmount(?,?,?,?)";
         Query query = entityManager.createNativeQuery(sql);
         query.setParameter(1, employeeID.getEmployeeID());
         query.setParameter(2, pcode);
-        query.setParameter(3, CetusUTL.covertMonthsToInt(period.getPeriodMonth()));
-        query.setParameter(4,period.getPeriodYear());
+        query.setParameter(3, month);
+        query.setParameter(4, yr);
         try{
             BigDecimal amount = (BigDecimal)(query.getSingleResult());
             
@@ -2373,11 +2118,47 @@ public class DataAccess implements CurrentPeriodProvider {
         return query.getResultList();
     }
     
+    public static List<Date> getHolidayDates(){
+        Query query = entityManager.createNativeQuery("select DateOf FROM ptmHolidays");
+        return query.getResultList();
+    }
+    
     public static List<PtmShiftSchedule> getShiftSchedule(String sql){
         
         Query query = entityManager.createNativeQuery(sql,PtmShiftSchedule.class);
         return query.getResultList();
     }
+    
+    public static List<VwPtmAttendanceWithComment> getAttendance(String sql){
+        
+        Query query = entityManager.createNativeQuery(sql,VwPtmAttendanceWithComment.class);
+        return query.getResultList();
+    }
+    
+    public static List getAttendanceSummary(String sql){
+        
+        Query query = entityManager.createNativeQuery(sql);
+       // @SuppressWarnings("unchecked")
+        //NotifyUtil.info("Results", query.getResultList().size()+" Records found", false);
+        List<AttendanceSummary> list = query.getResultList();
+        return list;
+    }
+    
+    public static List<AttendanceSummary> getAttendanceSummary(Date from, Date to){
+        
+        Query query = entityManager.createNamedQuery("getAttSum",AttendanceSummary.class);
+        query.setParameter(1, from);
+        query.setParameter(2, to);
+                
+        //@SuppressWarnings("unchecked")
+        //NotifyUtil.info("Results", query.getResultList().size()+" Records found", false);
+        List<AttendanceSummary> list = query.getResultList();
+        return list;
+    }
+    
+    
+    
+    
     
     public static PtmShifts getShiftByID(int ID){
         TypedQuery<PtmShifts> query = entityManager.createNamedQuery("PtmShifts.findByShiftID",PtmShifts.class);
@@ -2388,6 +2169,19 @@ public class DataAccess implements CurrentPeriodProvider {
             
             return null;
         }
+    }
+    
+    public static boolean isHoliday(Date date){
+        Query query = entityManager.createNativeQuery("SELECT dbo.ptmfnIsHoliday(?)");
+        query.setParameter(1, date);
+        StatusDisplayer.getDefault().setStatusText(query.toString());
+        return (boolean)query.getResultList().get(0);
+    }
+    
+    public static int getLatestShiftCode(int employeeID){
+        Query query = entityManager.createNativeQuery("SELECT dbo.ptmfnGetLatestShiftCode(?)");
+        query.setParameter(1, employeeID);
+        return (int)query.getResultList().get(0);
     }
     
     public static String getEmployeeShift(Date date,Employees e){
